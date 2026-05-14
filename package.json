@@ -1,0 +1,10 @@
+{
+  "name": "brick-x-brick",
+  "private": true,
+  "scripts": {
+    "setup": "npm install --prefix backend && npm install --prefix web && npm install --prefix mobile",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:web":     "npm run dev --prefix web",
+    "dev:mobile":  "cd mobile && npx expo start"
+  }
+}
