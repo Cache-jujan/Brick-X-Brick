@@ -1,4 +1,5 @@
 const { createProject, getProjects } = require('./projects.service')
+const prisma = require('../../config/db')
 
 const create = async (req, res) => {
   try {
@@ -17,7 +18,10 @@ const create = async (req, res) => {
 
 const list = async (req, res) => {
   try {
-    const projects = await getProjects(req.dbUser.id, req.dbUser.role)
+    const dbUser = await prisma.user.findUnique({ where: { id: req.user.id } })
+    if (!dbUser) return res.status(404).json({ error: 'User not found' })
+    
+    const projects = await getProjects(dbUser.id, dbUser.role)
     res.json(projects)
   } catch (err) {
     res.status(500).json({ error: err.message })

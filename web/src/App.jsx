@@ -1,8 +1,24 @@
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import Login from './pages/Login'
+import TicketQueue from './pages/TicketQueue'
+import MyTasks from './pages/MyTasks'
+
+const isLoggedIn = () => !!localStorage.getItem('token')
+
+function PrivateRoute({ children }) {
+  return isLoggedIn() ? children : <Navigate to="/login" replace />
+}
+
 function App() {
   return (
-    <div>
-      <h1>Brick X Brick</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/tickets" element={<PrivateRoute><TicketQueue /></PrivateRoute>} />
+        <Route path="/my-tasks" element={<PrivateRoute><MyTasks /></PrivateRoute>} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
