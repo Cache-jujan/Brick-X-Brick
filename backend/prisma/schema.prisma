@@ -29,9 +29,8 @@ enum ExpenseStatus {
 }
 
 model User {
-  id               String    @id @default(cuid())
+  id               String    @id  // no @default — Supabase provides the UUID
   email            String    @unique
-  password         String
   name             String
   role             Role
   createdAt        DateTime  @default(now())
