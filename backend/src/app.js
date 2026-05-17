@@ -13,6 +13,7 @@ app.use('/api/users', require('./modules/users/users.router'))
 app.use('/api/milestones', require('./modules/milestones/milestones.router'))
 app.use('/api/tasks', require('./modules/tasks/tasks.router'))
 app.use('/api/task-updates', require('./modules/task-updates/taskUpdates.router'))
+app.use('/api/tickets', require('./modules/tickets/tickets.router'))
 
 // Health check
 app.get('/health', (req, res) => {
