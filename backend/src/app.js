@@ -10,6 +10,7 @@ app.use('/api/auth', require('./modules/auth/auth.router'))
 app.use('/api/material-requests', require('./modules/material-requests/materialRequests.router'))
 app.use('/api/projects', require('./modules/projects/projects.router'))
 app.use('/api/users', require('./modules/users/users.router'))
+app.use('/api/tickets', require('./modules/tickets/tickets.router'))
 
 // Health check
 app.get('/health', (req, res) => {
