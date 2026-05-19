@@ -16,10 +16,13 @@ const createTaskUpdate = async ({ taskId, submittedBy, completionPct, issueText 
     data: { taskId, submittedBy, completionPct, issueText: issueText ?? null }
   })
 
-  await prisma.task.update({
-    where: { id: taskId },
-    data: { completionPct }
-  })
+ await prisma.task.update({
+  where: { id: taskId },
+  data: {
+    completionPct,
+    status: completionPct === 100 ? 'DONE' : 'PENDING',
+  },
+});
 
   const milestonePct = await recalculateMilestone(task.milestoneId)
   await recalculateProject(task.projectId)
