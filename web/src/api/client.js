@@ -1,11 +1,18 @@
 import axios from 'axios'
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+)
 
 const client = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
 })
 
-client.interceptors.request.use(config => {
-  const token = localStorage.getItem('token')
+client.interceptors.request.use(async config => {
+  const { data } = await supabase.auth.getSession()
+  const token = data.session?.access_token
   if (token) config.headers.Authorization = `Bearer ${token}`
   return config
 })
