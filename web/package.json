@@ -11,13 +11,17 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
-    "@supabase/supabase-js": "^2.105.4",
+    "@supabase/supabase-js": "^2.106.2",
     "@tanstack/react-query": "^5.100.10",
     "axios": "^1.16.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.16.0",
+    "motion": "^12.40.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-hook-form": "^7.75.0",
     "react-router-dom": "^7.15.0",
+    "recharts": "^2.12.7",
     "zod": "^4.4.3",
     "zustand": "^5.0.13"
   },
