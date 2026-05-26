@@ -8,7 +8,7 @@ const supabase = createClient(
 )
 
 const ROLE_ROUTES = {
-  GENERAL_MANAGER: '/projects',
+  GENERAL_MANAGER: '/create-project',
   PROJECT_MANAGER: '/tickets',
   SITE_MANAGER: '/my-tasks',
   PURCHASER: '/tickets',
