@@ -1,20 +1,23 @@
 const router = require('express').Router()
 const { verifyToken, requireRole } = require('../../middleware/auth')
-const { list, assign, resolve, reject, create } = require('./tickets.controller')
+const { list, get, create, resolve, reject } = require('./tickets.controller')
+
+const PM_GM = ['PROJECT_MANAGER', 'GENERAL_MANAGER']
+const ALL_ROLES = ['PROJECT_MANAGER', 'GENERAL_MANAGER', 'PURCHASER', 'SITE_MANAGER', 'SYS_ADMIN']
 
 // GET /api/tickets?projectId=&status=
-router.get('/', verifyToken, requireRole(['PROJECT_MANAGER', 'GENERAL_MANAGER', 'PURCHASER', 'SITE_MANAGER']), list)
+router.get('/', verifyToken, requireRole(ALL_ROLES), list)
 
-// POST /api/tickets — PM creates a new ticket
+// GET /api/tickets/:id
+router.get('/:id', verifyToken, requireRole(ALL_ROLES), get)
+
+// POST /api/tickets — PM creates ticket
 router.post('/', verifyToken, requireRole(['PROJECT_MANAGER']), create)
 
-// PATCH /api/tickets/:id/assign — PM assigns UNASSIGNED ticket
-router.patch('/:id/assign', verifyToken, requireRole(['PROJECT_MANAGER']), assign)
+// PATCH /api/tickets/:id/resolve — PM resolves
+router.patch('/:id/resolve', verifyToken, requireRole(PM_GM), resolve)
 
-// PATCH /api/tickets/:id/resolve — PM resolves PENDING ticket
-router.patch('/:id/resolve', verifyToken, requireRole(['PROJECT_MANAGER']), resolve)
-
-// PATCH /api/tickets/:id/reject — PM rejects PENDING ticket
-router.patch('/:id/reject', verifyToken, requireRole(['PROJECT_MANAGER']), reject)
+// PATCH /api/tickets/:id/reject — PM rejects
+router.patch('/:id/reject', verifyToken, requireRole(PM_GM), reject)
 
 module.exports = router

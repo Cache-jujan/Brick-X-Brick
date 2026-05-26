@@ -1,12 +1,12 @@
-const { 
-  getTickets, 
-  assignTicket, 
+const {
+  getTickets,
   getTicketById,
-  resolveTicket, 
+  createTicket,
+  resolveTicket,
   rejectTicket,
-  createTicket
 } = require('./tickets.service')
 
+// GET /api/tickets?projectId=&status=
 const list = async (req, res) => {
   try {
     const { projectId, status } = req.query
@@ -18,51 +18,59 @@ const list = async (req, res) => {
   }
 }
 
-const assign = async (req, res) => {
+// GET /api/tickets/:id
+const get = async (req, res) => {
   try {
-    const { id } = req.params
-    const { assignedTo } = req.body
-    if (!assignedTo) return res.status(400).json({ error: 'assignedTo is required' })
-    const ticket = await assignTicket(id, assignedTo)
+    const ticket = await getTicketById(req.params.id)
+    if (!ticket) return res.status(404).json({ error: 'Ticket not found' })
     res.json(ticket)
   } catch (err) {
-    res.status(400).json({ error: err.message })
+    res.status(500).json({ error: err.message })
   }
 }
 
-const resolve = async (req, res) => {
-  try {
-    const ticket = await resolveTicket(req.params.id)
-    res.json(ticket)
-  } catch (err) {
-    res.status(400).json({ error: err.message })
-  }
-}
-
-const reject = async (req, res) => {
-  try {
-    const ticket = await rejectTicket(req.params.id)
-    res.json(ticket)
-  } catch (err) {
-    res.status(400).json({ error: err.message })
-  }
-}
-
+// POST /api/tickets — PM creates a ticket
 const create = async (req, res) => {
   try {
-    const { projectId, type, description, quantity } = req.body
-    const submittedBy = req.user.id
-    if (!projectId) return res.status(400).json({ error: 'projectId is required' })
-    if (!type) return res.status(400).json({ error: 'type is required' })
-    if (!description?.trim()) return res.status(400).json({ error: 'description is required' })
+    const { projectId, type, subject, description, quantity, assignedTo, photoURL } = req.body
+    const submittedBy = req.dbUser.id
+
+    if (!projectId)   return res.status(400).json({ error: 'projectId is required' })
+    if (!type)        return res.status(400).json({ error: 'type is required' })
+    if (!subject?.trim()) return res.status(400).json({ error: 'subject is required' })
+    if (!assignedTo)  return res.status(400).json({ error: 'assignedTo is required' })
     if (!['MATERIAL_REQUEST', 'WORK_ITEM'].includes(type)) {
       return res.status(400).json({ error: 'type must be MATERIAL_REQUEST or WORK_ITEM' })
     }
-    const ticket = await createTicket({ projectId, type, description, quantity, submittedBy })
+
+    const ticket = await createTicket({ projectId, type, subject, description, quantity, assignedTo, submittedBy, photoURL })
     res.status(201).json(ticket)
   } catch (err) {
-    res.status(400).json({ error: err.message })
+    const status = err.status || 500
+    res.status(status).json({ error: err.message })
   }
 }
 
-module.exports = { list, assign, resolve, reject, create }
+// PATCH /api/tickets/:id/resolve — PM resolves
+const resolve = async (req, res) => {
+  try {
+    const ticket = await resolveTicket(req.params.id, req.dbUser.id)
+    res.json(ticket)
+  } catch (err) {
+    const status = err.status || 500
+    res.status(status).json({ error: err.message })
+  }
+}
+
+// PATCH /api/tickets/:id/reject — PM rejects
+const reject = async (req, res) => {
+  try {
+    const ticket = await rejectTicket(req.params.id, req.dbUser.id)
+    res.json(ticket)
+  } catch (err) {
+    const status = err.status || 500
+    res.status(status).json({ error: err.message })
+  }
+}
+
+module.exports = { list, get, create, resolve, reject }

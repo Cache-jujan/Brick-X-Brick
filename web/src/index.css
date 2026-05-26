@@ -1,1 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&display=swap');
 @import "tailwindcss";
+
+/* ─── CSS Variables ─────────────────────────────────────────────────────────── */
+:root {
+  --color-primary:       #D97B2C;
+  --color-primary-dark:  #c0681f;
+  --color-dark-bg:       #1A1A1A;
+  --color-surface:       #242424;
+  --color-surface-light: #2E2E2E;
+  --color-success:       #3EC87A;
+  --color-danger:        #E84B4B;
+  --color-warning:       #F5A623;
+  --color-text-primary:  #F0EDE8;
+  --color-text-muted:    #9A9590;
+  --color-blockchain:    #6C63FF;
+  --color-gold:          #F5B93E;
+
+  --font-display: "Syne", sans-serif;
+  --font-body:    "DM Sans", sans-serif;
+  --font-mono:    "JetBrains Mono", monospace;
+}
+
+/* ─── Base ──────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  background-color: var(--color-dark-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); }
+code, pre, .font-mono    { font-family: var(--font-mono); }
+
+/* ─── Scrollbar ─────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--color-dark-bg); }
+::-webkit-scrollbar-thumb { background: var(--color-surface-light); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-muted); }
+
+/* ─── No scrollbar utility ──────────────────────────────────────────────────── */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
