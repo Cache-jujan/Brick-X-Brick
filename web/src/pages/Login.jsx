@@ -46,9 +46,6 @@ export default function Login() {
       const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
       if (authError) throw new Error(authError.message)
 
-      const token = data.session.access_token
-      localStorage.setItem('token', token)
-
       // 2. Get role from backend
       const res = await client.get('/api/auth/me', {
         headers: { Authorization: `Bearer ${token}` },
